@@ -4,13 +4,12 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a code test.
 
-A few resources to get you started if this is your first Flutter project:
+Link Deploy Demo:
+- [Firebase](https://fir-app-web-dd047.web.app)
+- [Codemagic](https://ltnam432002_mobile_intern_assignment.codemagic.app)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+For install:
+ - Run 'flutter pub get' in terminal
+ - Run 'flutter run' in terminal
