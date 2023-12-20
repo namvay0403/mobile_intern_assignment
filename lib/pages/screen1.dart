@@ -82,70 +82,88 @@ class _Screen1State extends State<Screen1> {
       required double price,
       required String color}) {
     Color color_convert = ColorUtils.stringToColor(color);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            alignment: Alignment.center,
-            height: 380,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              color: color_convert,
-              image: DecorationImage(
-                  image: NetworkImage(imageUrl), fit: BoxFit.cover),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(name, style: TextStyle(fontSize: 18, fontFamily: fontBoldApp)),
-          SizedBox(
-            height: 15,
-          ),
-          Text(description,
-              style: TextStyle(
-                  fontSize: 15, fontFamily: fontApp, color: Colors.grey)),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    bool check = false;
+    CartModel cartModel = CartModel(id, 1, price, name, imageUrl);
+    return BlocBuilder<AddCartCubit, AddCartState>(
+      builder: (context, state) {
+        if (state is AddCartSuccess) {
+          check = context.read<AddCartCubit>().checkCart(id);
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('USD $price',
-                  style: TextStyle(fontSize: 18, fontFamily: fontBoldApp)),
-              InkWell(
-                onTap: () {
-                  CartModel cartModel = CartModel(id, 1, price, name, imageUrl);
-                  context.read<AddCartCubit>().addCart(cartModel);
-                },
-                child: Container(
-                  height: 40,
-                  width: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: Colors.yellow,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Center(
-                      child: Text(
-                        'ADD TO CART',
-                        style: TextStyle(fontFamily: fontBoldApp, fontSize: 15),
-                      ),
-                    ),
-                  ),
+              Container(
+                alignment: Alignment.center,
+                height: 380,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: color_convert,
+                  image: DecorationImage(
+                      image: NetworkImage(imageUrl), fit: BoxFit.cover),
                 ),
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(name,
+                  style: TextStyle(fontSize: 18, fontFamily: fontBoldApp)),
+              SizedBox(
+                height: 15,
+              ),
+              Text(description,
+                  style: TextStyle(
+                      fontSize: 15, fontFamily: fontApp, color: Colors.grey)),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('USD $price',
+                      style: TextStyle(fontSize: 18, fontFamily: fontBoldApp)),
+                  InkWell(
+                      onTap: () {
+                        context.read<AddCartCubit>().addCart(cartModel);
+                      },
+                      child: check == false
+                          ? Container(
+                              height: 40,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18),
+                                color: Colors.yellow,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Center(
+                                  child: Text(
+                                    'ADD TO CART',
+                                    style: TextStyle(
+                                        fontFamily: fontBoldApp, fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : CircleAvatar(
+                              radius: 14,
+                              backgroundColor: Colors.yellow,
+                              child: IconButton(
+                                icon: Image.asset(AppAssets.check),
+                                onPressed: () {},
+                              ),
+                            ))
+                ],
+              ),
+              SizedBox(
+                height: 25,
+              ),
             ],
           ),
-          SizedBox(
-            height: 25,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
