@@ -48,9 +48,9 @@ class _Screen2State extends State<Screen2> {
                 ),
               ),
               body: ListView.builder(
-                itemCount: state.cartModels.length,
+                itemCount: state.carts.length,
                 itemBuilder: (context, index) {
-                  var item = state.cartModels[index];
+                  var item = state.carts[index];
                   return itemWidget(item.id, item.imageUrl, item.name,
                       item.price, item.count);
                 },

@@ -1,8 +1,6 @@
 part of 'cart_bloc.dart';
 
-abstract class CartEvent {
-  List<dynamic> carts = [];
-}
+abstract class CartEvent {}
 
 class CartAddEvent extends CartEvent {
   final CartModel cartModel;
