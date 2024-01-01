@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile_intern_assignment/cubit/add_cart/add_cart_cubit.dart';
-import 'package:mobile_intern_assignment/cubit/get_data/get_data_cubit.dart';
+import 'package:mobile_intern_assignment/cubit/cart/cart_bloc.dart';
 import 'package:mobile_intern_assignment/utilities/constant.dart';
 import 'package:string_to_color/string_to_color.dart';
 
+import '../cubit/get_data_bloc/get_data_bloc.dart';
 import '../models/cart_model.dart';
 
 class Screen1 extends StatefulWidget {
@@ -19,7 +19,7 @@ class _Screen1State extends State<Screen1> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<GetDataCubit>().getData();
+    context.read<GetDataBloc>().add(GetDataEvent());
   }
 
   @override
@@ -40,35 +40,21 @@ class _Screen1State extends State<Screen1> {
               style: TextStyle(fontFamily: fontBoldApp, fontSize: 20),
             ),
           ),
-          body: BlocBuilder<GetDataCubit, GetDataState>(
+          body: BlocBuilder<GetDataBloc, GetDataState>(
             builder: (context, state) {
-              if (state is GetDataLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is GetDataLoaded) {
-                return ListView.builder(
-                  itemCount: state.shoes.length,
-                  itemBuilder: (context, index) {
-                    var shoe = state.shoes[index];
-                    return item(
-                        id: shoe.id,
-                        imageUrl: shoe.image,
-                        name: shoe.name,
-                        description: shoe.description,
-                        price: shoe.price,
-                        color: shoe.color);
-                  },
-                );
-              } else if (state is GetDataFailed) {
-                return Center(
-                  child: Text(state.message),
-                );
-              } else {
-                return const Center(
-                  child: Text('No data'),
-                );
-              }
+              return ListView.builder(
+                itemCount: state.shoes.length,
+                itemBuilder: (context, index) {
+                  var shoe = state.shoes[index];
+                  return item(
+                      id: shoe.id,
+                      imageUrl: shoe.image,
+                      name: shoe.name,
+                      description: shoe.description,
+                      price: shoe.price,
+                      color: shoe.color);
+                },
+              );
             },
           )),
     );
@@ -84,10 +70,10 @@ class _Screen1State extends State<Screen1> {
     Color color_convert = ColorUtils.stringToColor(color);
     bool check = false;
     CartModel cartModel = CartModel(id, 1, price, name, imageUrl);
-    return BlocBuilder<AddCartCubit, AddCartState>(
+    return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        if (state is AddCartSuccess) {
-          check = context.read<AddCartCubit>().checkCart(id);
+        if (state is CartSuccess) {
+          check = context.read<CartBloc>().checkCart(id);
         }
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
@@ -126,7 +112,7 @@ class _Screen1State extends State<Screen1> {
                       style: TextStyle(fontSize: 18, fontFamily: fontBoldApp)),
                   InkWell(
                       onTap: () {
-                        context.read<AddCartCubit>().addCart(cartModel);
+                        context.read<CartBloc>().add((CartAddEvent(cartModel)));
                       },
                       child: check == false
                           ? Container(
